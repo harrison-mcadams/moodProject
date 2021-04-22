@@ -5,8 +5,8 @@ close all;
 name = 'harry';
 %name = 'geena';
 
-%year = 2020;
-year = 2021;
+year = 2020;
+%year = 2021;
 %year = 'combined';
 
 saveDir = '~/Desktop';
@@ -23,3 +23,6 @@ analyzeByDayOfWeek(ratingCellArray, 'saveName', saveName);
 
 saveName = fullfile(saveDir, ['exercise', saveNameSuffix]);
 analyzeExercise(ratingCellArray, 'saveName', saveName);
+
+saveName = fullfile(saveDir, ['collapsed', saveNameSuffix]);
+plotCollapsedMood(ratingCellArray, 'saveName', saveName);
