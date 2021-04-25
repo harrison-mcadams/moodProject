@@ -142,6 +142,10 @@ axisHandle.XLim = [0, bottomEndIndex+0.75];
 axisHandle.YLim = [0 8];
 set(gcf, 'Position', [46 303 1321 495]);
 
+pause(1);
+axisHandle.XAxis.Axle.Visible = 'off';
+axisHandle.YAxis.Axle.Visible = 'off';
+
 
 if ~isempty(p.Results.saveName)
     saveas(plotFig, p.Results.saveName);
