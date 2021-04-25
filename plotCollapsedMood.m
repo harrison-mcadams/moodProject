@@ -67,8 +67,8 @@ if p.Results.doMonths
     xtickLabelsMonths = {};
     priorColumn = 0;
     for ii = 1:length(monthTransitions)
-        column = ceil(monthTransitions(ii)/7);
-        row = monthTransitions(ii) - (column-1)*7;
+        column = ceil((monthTransitions(ii)+initialNans)/7);
+        row = monthTransitions(ii)+initialNans - (column-1)*7;
         
         % horizontal line that divides month
         line([column-0.5, column+0.5], [row+0.5, row+0.5], 'Color', 'k');
