@@ -3,19 +3,21 @@
 emailAddress=$1
 
 # Specify paths
-pathToEmail='~/'
-savePath='~/moodProject'
+pathToEmail='/home/harry'
+savePath='/home/harry/moodProject'
 
 # identify sender
-echo "year, month, day, dayOfWeek, rating, comments" > ${savePath}/${emailAddress}_MoodRatings.csv
+echo "year, month, day, dayOfWeek, rating, comments" > "${savePath}/${emailAddress}_MoodRatings.csv"
 
 
 for email in `ls ${pathToEmail}/mail/new`; do
-	#echo $email
-	sender=`cat ~/mail/new/$email | grep "From:"`
-	sender=`echo $sender | awk '{split($0,a,": "); print a[2]}'`
-	sender=`echo $sender | awk '{split($0,a," "); print a[1]}'`
-	echo $sender
+	echo $email
+	
+	# Identify email address
+	sender1=`cat ${pathToEmail}/mail/new/$email | grep "From:"`
+	sender2=`echo $sender1 | awk '{split($0,a,"<"); print a[2]}'`
+	sender3=`echo $sender2 | awk '{split($0,a,">"); print a[1]}'`
+	echo "sender is " $sender3
 	
 	saveFile='${emailAddress}_MoodRatings.csv'
 
@@ -83,8 +85,10 @@ for email in `ls ${pathToEmail}/mail/new`; do
 		contentWithoutRating=`echo $contentWithoutRating | sed -e 's/^[ \t]*//'`
 		#echo "Content is: $contentWithoutRating"
 		
-		echo -e "${year}\t${month}\t${dayOfMonth}\t$dayOfWeek\t$rating\t$contentWithoutRating" >> "/home/harry/$saveFile"
-
+		if [ $sender3 = $emailAddress ]; then
+			echo -e "${year}\t${month}\t${dayOfMonth}\t$dayOfWeek\t$rating\t$contentWithoutRating" >> "${savePath}/${emailAddress}_MoodRatings.csv"
+			echo "i made it here"
+		fi
 		
 	elif [ $containsJanuaryException -eq 1 ] ; then
 		month='Jan'
@@ -128,34 +132,36 @@ for email in `ls ${pathToEmail}/mail/new`; do
 		# remove any leading white space
 		contentWithoutRating=`echo $contentWithoutRating | sed -e 's/^[ \t]*//'`
 		echo "Content is: $contentWithoutRating"
-		echo -e "${year}\t${month}\t${dayOfMonth}\t$dayOfWeek\t$rating\t$contentWithoutRating" >> "/home/harry/$saveFile"
+		if [ $sender3 = $emailAddress ]; then
 
+			echo -e "${year}\t${month}\t${dayOfMonth}\t$dayOfWeek\t$rating\t$contentWithoutRating" >> "${savePath}/${emailAddress}_MoodRatings.csv"
+		fi
 	fi
 	
 
 
 done
 
-for x in 1 2; do
+#for x in 1 2; do
 
-	if [ $x = 1 ]; then
-		saveFile="/home/harry/harryMoodRatings.csv"
-	elif [ $x = 2 ]; then
-		saveFile="/home/harry/geenaMoodRatings.csv"
-	fi
+#	if [ $x = 1 ]; then
+#		saveFile="/home/harry/harryMoodRatings.csv"
+#	elif [ $x = 2 ]; then
+#		saveFile="/home/harry/geenaMoodRatings.csv"
+#	fi
 
 	
-	awk '!a[$0]++' $saveFile > cleanedMoodRatings.csv
+	awk '!a[$0]++' ${savePath}/${emailAddress}_MoodRatings.csv > cleanedMoodRatings.csv
 	
 	tail -n +2 cleanedMoodRatings.csv > cleanedMoodRatingsWithoutHeader.csv
 	
-	echo "month, day, dayOfWeek, rating, comments"  > $saveFile
-	sort -k 1M -k 2 cleanedMoodRatingsWithoutHeader.csv >> $saveFile
+	echo "month, day, dayOfWeek, rating, comments"  > ${savePath}/${emailAddress}_MoodRatings.csv
+	sort -k 1M -k 2 cleanedMoodRatingsWithoutHeader.csv >> ${savePath}/${emailAddress}_MoodRatings.csv
 	
 	rm cleanedMoodRatings.csv
 	
 	rm cleanedMoodRatingsWithoutHeader.csv
 
-done
+#done
 
 
