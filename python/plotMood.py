@@ -87,13 +87,13 @@ def plotMood(moodData, email, year, savePath):
 	rotationValue=90
 	yLegendValue=-1
 	xLegendValue = -0.9
-	plt.text(-0.5, yLegendValue, 'Sun', rotation=rotationValue, fontsize=fontSizeValue)
-	plt.text(-0.5+1, yLegendValue, 'Mon', rotation=rotationValue, fontsize=fontSizeValue)
-	plt.text(-0.5+2, yLegendValue, 'Tue', rotation=rotationValue, fontsize=fontSizeValue)
-	plt.text(-0.5+3, yLegendValue, 'Wed', rotation=rotationValue, fontsize=fontSizeValue)
-	plt.text(-0.5+4, yLegendValue, 'Thu', rotation=rotationValue, fontsize=fontSizeValue)
-	plt.text(-0.5+5, yLegendValue, 'Fri', rotation=rotationValue, fontsize=fontSizeValue)
-	plt.text(-0.5+6, yLegendValue, 'Sat', rotation=rotationValue, fontsize=fontSizeValue)
+	plt.text(-0.5, yLegendValue, 'Sun', rotation=rotationValue, fontsize=fontSizeValue, horizontalalignment='left', verticalalignment='bottom')
+	plt.text(-0.5+1, yLegendValue, 'Mon', rotation=rotationValue, fontsize=fontSizeValue, horizontalalignment='left', verticalalignment='bottom')
+	plt.text(-0.5+2, yLegendValue, 'Tue', rotation=rotationValue, fontsize=fontSizeValue, horizontalalignment='left', verticalalignment='bottom')
+	plt.text(-0.5+3, yLegendValue, 'Wed', rotation=rotationValue, fontsize=fontSizeValue, horizontalalignment='left', verticalalignment='bottom')
+	plt.text(-0.5+4, yLegendValue, 'Thu', rotation=rotationValue, fontsize=fontSizeValue, horizontalalignment='left', verticalalignment='bottom')
+	plt.text(-0.5+5, yLegendValue, 'Fri', rotation=rotationValue, fontsize=fontSizeValue, horizontalalignment='left', verticalalignment='bottom')
+	plt.text(-0.5+6, yLegendValue, 'Sat', rotation=rotationValue, fontsize=fontSizeValue, horizontalalignment='left', verticalalignment='bottom')
 
 
 	plt.text(xLegendValue, 2.5, 'Jan', fontsize=fontSizeValue, horizontalalignment='right')
@@ -122,7 +122,6 @@ def plotMood(moodData, email, year, savePath):
 	colorBarTicks = np.linspace(np.floor(minRating), np.ceil(maxRating), int(np.ceil(maxRating)) - int(np.floor(minRating)) + 1 )
 	cbar.set_ticks(colorBarTicks)
 	cbar.ax.tick_params(labelsize=fontSizeValue) 
-	plt.title(year)
 	plt.savefig("{}/{}_{}.png".format(savePath, email, year), dpi=1000, bbox_inches='tight')
 
 	#plt.show() 
