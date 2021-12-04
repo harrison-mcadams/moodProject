@@ -28,11 +28,15 @@ for ii = 1:length(nonExerciseKeyWords)
 end
 totalFakeExerciseIndices = unique(totalFakeExerciseIndices);
 
+
 % Remove fakes
 totalExerciseIndices = setxor(totalExerciseIndices, totalFakeExerciseIndices);
 
+% Days after exercise to ignore
+daysAfterExerciseToIgnore = 0;
+
 totalIndices = (1:length({ratingCellArray{:,2}}));
-nonExerciseIndices = setxor(totalIndices, totalExerciseIndices);
+nonExerciseIndices = setxor(totalIndices, [totalExerciseIndices, totalExerciseIndices+daysAfterExerciseToIgnore]);
 
 %% Grab appropriate ratings
 exerciseRatings = [ratingCellArray{totalExerciseIndices,2}];
@@ -56,5 +60,21 @@ title(['Exercise (N = ', num2str(length(exerciseRatings)), ', ', sprintf('%4.2f'
 if ~isempty(p.Results.saveName)
     saveas(plotFig, p.Results.saveName);
 end
+
+
+plotFig = figure;
+hold on;
+plotSpread_scatter(data, 'spreadWidth', 0.5, 'distributionMarker', '.', 'markerSize', 1000, 'alpha', 0.2);
+% find the mean rating
+meanRating = mean([exerciseRatings, nonExerciseRatings]);
+% add to plot
+line([0.65 1.35], [meanRating meanRating], 'Color', 'r', 'LineWidth', 2);
+line([1.65 2.35], [meanRating meanRating], 'Color', 'r', 'LineWidth', 2);
+
+lowExerciseIndices = find(exerciseRatings < meanRating);
+lowNonExerciseIndices = find(nonExerciseRatings < meanRating);
+lowExerciseRatings = exerciseRatings(lowExerciseIndices);
+lowNonExerciseRatings = nonExerciseRatings(lowNonExerciseIndices);
+
 
 end
