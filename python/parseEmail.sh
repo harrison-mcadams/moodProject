@@ -1,21 +1,24 @@
 #!/bin/bash
 
+emailAddress=$1
+
+# Specify paths
+pathToEmail='~/'
+savePath='~/moodProject'
+
 # identify sender
-echo "year, month, day, dayOfWeek, rating, comments" > ~/harryMoodRatings.csv
-echo "year, month, day, dayOfWeek, rating, comments"  > ~/geenaMoodRatings.csv
+echo "year, month, day, dayOfWeek, rating, comments" > ${savePath}/${emailAddress}_MoodRatings.csv
 
 
-for email in `ls ~/mail/new`; do
+for email in `ls ${pathToEmail}/mail/new`; do
 	#echo $email
 	sender=`cat ~/mail/new/$email | grep "From:"`
 	sender=`echo $sender | awk '{split($0,a,": "); print a[2]}'`
 	sender=`echo $sender | awk '{split($0,a," "); print a[1]}'`
-	#echo $sender
-	if [ $sender = Harrison ]; then
-		saveFile='harryMoodRatings.csv'
-	elif [ $sender = Geena ]; then
-		saveFile='geenaMoodRatings.csv'
-	fi
+	echo $sender
+	
+	saveFile='${emailAddress}_MoodRatings.csv'
+
 	#echo $saveFile
 	
 	containsStandardSubjectTemplate=`cat ~/mail/new/$email | grep -c "Subject: Re: Please rate your mood from today on a scale of 0-10."`
