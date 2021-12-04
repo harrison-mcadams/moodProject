@@ -34,10 +34,12 @@ def plotMood(moodData, email, year, savePath):
 	    # Determine the y coordinate
 		y = math.floor((dateNumber+initialShift)/7)
 		
+		moodRating = np.NaN
 		# Grab mood rating
 		for ii in moodDataForYear:
 			if ii[0] == dateToPlot:
-				moodRating = ii[1]				
+				moodRating = ii[1]		
+				#print(ii)		
 		moodGrid[y,x] = moodRating
 		moodRating = np.NaN
 		
