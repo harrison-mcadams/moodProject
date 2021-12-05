@@ -204,7 +204,7 @@ def locateDate(moodData, email, year, savePath):
 		stringdate = str(dateToPlot)
 		stringdate = stringdate.replace("-", "")
 		f.write("    function myFunction{}() {{\n".format(stringdate))
-		f.write("    alert('{}\\nMood Rating: {}\\nComments: {}');\n".format(fulldatestring, moodRating, comments))
+		f.write("    alert(\"{}\\nMood Rating: {}\\nComments: {}\");\n".format(fulldatestring, moodRating, comments))
 		f.write("    }\n")
 		one_day = timedelta(days=1)
 		dateToPlot += one_day
