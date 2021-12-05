@@ -158,7 +158,6 @@ def locateDate(moodData, email, year, savePath):
 	f.write("  </head>\n")
 	f.write("  <body>\n")
 	f.write("      <img src='{}_{}.png' alt='My test image' usemap='#workmap' width='{}' height='{}'>\n".format(email,year, w, h))
-	f.write("    </body>\n")
 	f.write("    <map name='workmap'>\n")
 
 
@@ -167,7 +166,9 @@ def locateDate(moodData, email, year, savePath):
 	while dateToPlot <= date(year = year, month = 12, day = 31):
 		rectangleSpecification = [xCoordinate, yCoordinate, xCoordinate+boxWidth, yCoordinate+boxWidth-lengthScalerFudgeFactor]
 		lst_str = str(rectangleSpecification)[1:-1] 	
-		f.write("	    <area shape='rect' coords='{}' alt='Computer' href='{}'>\n".format(lst_str, dateToPlot))
+		stringdate = str(dateToPlot)
+		stringdate = stringdate.replace("-", "")
+		f.write("	    <area shape='rect' coords='{}' onclick='myFunction{}()'>\n".format(lst_str, stringdate))
 		print(rectangleSpecification)
 		xCoordinate = xCoordinate + boxWidth
 		if xCoordinate + boxWidth >= rightXPixel+horizontalFudgeFactor:
@@ -177,8 +178,24 @@ def locateDate(moodData, email, year, savePath):
 
 		one_day = timedelta(days=1)
 		dateToPlot += one_day
-	
 	f.write("  </map>\n")
+
+	# Add the script part to the HTML file
+
+
+	dateToPlot = date(year = year, month = 1, day = 1)
+	while dateToPlot <= date(year = year, month = 12, day = 31):
+		f.write("    <script>\n")
+		stringdate = str(dateToPlot)
+		stringdate = stringdate.replace("-", "")
+		f.write("    function myFunction{}() {{\n".format(stringdate))
+		f.write("    alert('testing 1...2...3...');\n")
+		f.write("    }\n")
+		one_day = timedelta(days=1)
+		dateToPlot += one_day
+		f.write("</script>\n")
+
+	
 	f.write("</html>\n")
 	f.close()
 
