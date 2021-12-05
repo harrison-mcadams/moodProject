@@ -185,11 +185,26 @@ def locateDate(moodData, email, year, savePath):
 
 	dateToPlot = date(year = year, month = 1, day = 1)
 	while dateToPlot <= date(year = year, month = 12, day = 31):
+		
+		# Find the relevant data for that date
+		moodRating = ""
+		comments = ""
+		# Grab mood rating
+		for ii in moodData:
+			if ii[0] == dateToPlot:
+				moodRating = ii[1]
+				comments = ii[2]		
+		fulldatestring=dateToPlot.strftime("%A %B %d, %Y")
+		print(fulldatestring)
+		print(moodRating)
+		print(comments)
+		
+	
 		f.write("    <script>\n")
 		stringdate = str(dateToPlot)
 		stringdate = stringdate.replace("-", "")
 		f.write("    function myFunction{}() {{\n".format(stringdate))
-		f.write("    alert('testing 1...2...3...');\n")
+		f.write("    alert('{}\\nMood Rating: {}\\nComments: {}');\n".format(fulldatestring, moodRating, comments))
 		f.write("    }\n")
 		one_day = timedelta(days=1)
 		dateToPlot += one_day
