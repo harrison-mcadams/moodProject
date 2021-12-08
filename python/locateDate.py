@@ -141,13 +141,29 @@ def locateDate(moodData, email, year, savePath):
 	xCoordinate = upperLeftPixelX+horizontalFudgeFactor
 	yCoordinate = upperRightPixelY+verticalFudgeFactor
 
-	f = open("{}/{}_{}.html".format(savePath, email,year), 'w')
+	f = open("{}/{}_{}.php".format(savePath, email,year), 'w')
+	f.write("<?php\n") 
+	f.write("session_start();\n")
+
+	f.write("include(\"connection.php\");\n")
+	f.write("include(\"functions.php\");\n")
+
+	f.write("$user_data = check_login($con);\n")
+	f.write("if($user_data['user_name'] != \"{}\")\n".format(email))
+	f.write("{\n")
+	f.write("        //redirect to login\n")
+	f.write("        header(\"Location: login.php\");\n")
+	f.write("        die;\n")
+	f.write("}\n")
+	f.write("?>\n")
+	
+	
 	f.write("<!DOCTYPE html>\n")
 
 	f.write("<html>\n")
 	f.write("  <head>\n")
 	f.write("    <meta charset='utf-8'>\n")
-	f.write("    <title>Harry 2021</title>\n")
+	f.write("    <title>{}</title>\n".format(year))
 	f.write("    <style> img {\n")
 	f.write("float: left;\n")
 	f.write("margin: 0px 0px;\n")
