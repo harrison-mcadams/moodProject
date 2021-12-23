@@ -11,9 +11,9 @@ echo "year, month, day, dayOfWeek, rating, comments" > "${savePath}/${emailAddre
 
 
 for email in `ls ${pathToEmail}/mail/new`; do
+#for email in 1640270542.M293276P1560Q0Ra532027150de6cd4.raspberrypi; do
 	echo $email
 	
-	# Identify email address
 	sender1=`cat ${pathToEmail}/mail/new/$email | grep "From:"`
 	sender2=`echo $sender1 | awk '{split($0,a,"<"); print a[2]}'`
 	sender3=`echo $sender2 | awk '{split($0,a,">"); print a[1]}'`
@@ -136,6 +136,69 @@ for email in `ls ${pathToEmail}/mail/new`; do
 
 			echo -e "${year}\t${month}\t${dayOfMonth}\t$dayOfWeek\t$rating\t$contentWithoutRating" >> "${savePath}/${emailAddress}_MoodRatings.csv"
 		fi
+	else
+		# see if the subject is a date
+		subject=`echo $subject | awk '{split($0,a,"Subject:"); print a[2]}'`
+		echo "we think the date is $subject"
+		if date -d "$subject"; then
+			echo "whoa boy, doing something cray"
+			dayOfWeek=$(date -d "$subject" '+%a')
+
+			month=$(date -d "$subject" '+%b')
+
+			dayOfMonth=$(date -d "$subject" '+%d')
+			dayOfMonth=$(echo $dayOfMonth | sed 's/^0*//')
+
+			year=$(date -d "$subject" '+%Y')
+
+# figure out the message content
+		beginContentLine=`cat ~/mail/new/$email | grep  -n "<div dir" | awk '{split($0, a, ":"); print a[1]}'`
+		endContentLine=$beginContentLine
+echo "endcontnetline is $beginContentLine"
+		#content=`cat ~/mail/new/$email | grep -n "<div dir="auto">" | awk '{split($0, a, "</div>"); print a[0]}'`		
+#beginContentLine=$((beginContentLine + 2))
+		#endContentLine=`cat ~/mail/new/$email | grep -n "<hgmoodproject2020@gmail.com> wrote:" | awk '{split($0, a, ":"); print a[1]}'`
+		#endContentLine=$((endContentLine - 1))
+		content=`sed -n "${beginContentLine},${endContentLine}p" ~/mail/new/$email` 
+		echo $content		
+
+		## grab rating
+		# grab all numbers in content
+		rating=`echo "$content" | tr '\n' ' ' | sed -e 's/[^0-9.]/ /g' -e 's/^ *//g' -e 's/ *$//g' | tr -s ' '`
+		# grab the first one in case there is more than one number
+		rating=`echo "${rating%% *}"`
+		lastCharacterOfRating=`echo "${rating: -1}"`
+		if [ $lastCharacterOfRating = . ]; then
+			rating=`echo $rating | rev | cut -c 2- | rev`
+		fi
+		
+		#echo "Rating is: $rating"
+		
+		# grab any other text
+		contentWithoutRating=`printf '%s\n' "${content#*$rating}"`
+		if [ -z "$contentWithoutRating" ]; then
+			contentWithoutRatings='']
+		else
+		# if the first character is a period, remove it
+			firstCharacterAfterRating="${contentWithoutRating:0:1}"
+			if [ $firstCharacterAfterRating = . ]; then
+				contentWithoutRating="${contentWithoutRating:1}"
+			fi
+		fi
+		
+		# remove any leading white space
+		contentWithoutRating=`echo $contentWithoutRating | sed -e 's/^[ \t]*//'`
+		contentWithoutRating=`echo $contentWithoutRating | awk '{split($0, a, "</div>"); print a[1]}'`
+		#echo "Content is: $contentWithoutRating"
+		
+		if [ $sender3 = $emailAddress ]; then
+			echo -e "${year}\t${month}\t${dayOfMonth}\t$dayOfWeek\t$rating\t$contentWithoutRating" >> "${savePath}/${emailAddress}_MoodRatings.csv"
+			echo "i made it here"
+		fi
+
+
+		fi
+
 	fi
 	
 
@@ -163,5 +226,4 @@ done
 	rm cleanedMoodRatingsWithoutHeader.csv
 
 #done
-
 
