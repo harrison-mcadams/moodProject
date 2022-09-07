@@ -22,13 +22,14 @@ def makeWebpages(email, years, savePath):
     f.write("<h1>Analyze</h1>\n")
 
     f.write("<p><a href='custom.php'>Compare Keywords</a></p>\n")
+    f.write("<p><a href='{}_wordCloud.php'>Word Cloud</a></p>\n".format(email))
     f.write("</center>\n")
     f.write("</body>\n")
     f.write("</html>\n")
     f.close()
 
 
-def makeHeader(f, email, location):
+def makePHP(f, email, location):
     f.write("<?php\n")
     f.write("session_start();\n")
     f.write("include('connection.php');\n")
@@ -44,6 +45,10 @@ def makeHeader(f, email, location):
     f.write("<title>THE MOOD PROJECT</title>\n")
     f.write("<meta charset='UTF-8'>\n")
     f.write("<meta name='viewport' content='width=device-width, initial-scale=1''>\n")
+    return f
+
+
+def makeHeader(f, email, location):
     f.write("<link rel='stylesheet' href='https://www.w3schools.com/w3css/4/w3.css'>\n")
     f.write("<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato'>\n")
     f.write("<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat'>\n")
