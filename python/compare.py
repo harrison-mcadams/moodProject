@@ -14,10 +14,10 @@ def compare(moodData, comparisonAKeyWords, comparisonBKeyWords):
         trueForA = 0
         trueForB = 0
         for aa in comparisonAKeyWords:
-            if aa in ii[2]:
+            if aa.lower() in ii[2].lower():
                 trueForA = 1
         for bb in comparisonBKeyWords:
-            if bb in ii[2]:
+            if bb.lower() in ii[2].lower():
                 trueForB = 1
         if trueForA == 1 and trueForB == 0:
             # go in A
