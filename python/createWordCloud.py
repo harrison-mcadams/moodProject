@@ -1,18 +1,22 @@
-def createWordCloud(moodData, savePath):
+def createWordCloud(moodData, email, savePath):
 
     import matplotlib.pyplot as plt
     from wordcloud import WordCloud, STOPWORDS
+    import makeWebpages
 
     stopwords = set(STOPWORDS)
     stopwords.add('day')
     stopwords.add('got')
+    stopwords.remove('not')
+    stopwords.remove('didn\'t')
 
     comments = ''
     for i in moodData:
         newComment = i[2]
         comments = comments + ' ' + newComment
-
-    wordcloud = WordCloud(width=800, height=800,
+    w = 800
+    h = 800
+    wordcloud = WordCloud(width=w, height=h,
                           background_color='white',
                           stopwords=stopwords,
                           collocations=True,
@@ -27,4 +31,15 @@ def createWordCloud(moodData, savePath):
     plt.axis("off")
     plt.tight_layout(pad=0)
 
-    plt.show()
+    #plt.show()
+    plt.savefig("{}/{}_wordCloud.png".format(savePath, email), dpi=1000, bbox_inches='tight')
+
+    f = open("{}/{}_wordCloud.php".format(savePath, email), 'w')
+    location = 'post-signin'
+    f = makeWebpages.makeHeader(f, email, location)
+    f.write(
+        "      <img src='{}/{}_wordCloud.png' alt='My test image' usemap='#workmap' width='{}' height='{}'>\n".format(savePath, email,
+                                                                                                            w, h))
+    f.write("</html>\n")
+    f.close()
+
