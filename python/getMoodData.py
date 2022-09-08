@@ -6,6 +6,7 @@ def getMoodData(email, csvPath):
 	header = next(csvreader)
 
 	rows = []
+	import numpy
 	for row in csvreader:
 		rows.append(row)
 
@@ -17,19 +18,21 @@ def getMoodData(email, csvPath):
 	dates = []
 	moodData = [];
 	for row in rows:
-		#print(row)
+		# print(row)
 		monthNumber = list(calendar.month_abbr).index(row[1])
-		#print(month_number)
-	
-		dateNum = date(year = int(row[0]), month = monthNumber, day = int(row[2]))
-		moodRating = float(row[4])
+		# print(month_number)
+
+		dateNum = date(year=int(row[0]), month=monthNumber, day=int(row[2]))
+		if len(row[4]) != 0:
+			moodRating = float(row[4])
+		else:
+			moodRating = numpy.nan
 		comments = row[5]
-		#print(dateNum)
+		# print(dateNum)
 		dates.append(dateNum)
-	
+
 		moodData.append([dateNum, moodRating, comments])
-	
-	
+
 	moodData.sort()
 	
 
