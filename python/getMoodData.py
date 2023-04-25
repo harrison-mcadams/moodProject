@@ -8,7 +8,12 @@ def getMoodData(email, csvPath):
 	rows = []
 	import numpy
 	for row in csvreader:
-		rows.append(row)
+
+		if not(row[0]):
+			print('dumb')
+		else:
+
+			rows.append(row)
 
 
 
@@ -23,6 +28,7 @@ def getMoodData(email, csvPath):
 		# print(month_number)
 
 		dateNum = date(year=int(row[0]), month=monthNumber, day=int(row[2]))
+
 		if len(row[4]) != 0:
 			moodRating = float(row[4])
 		else:

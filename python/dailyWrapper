@@ -1,0 +1,8 @@
+#!/bin/bash
+
+pathToCode=/home/harry/moodProject/python
+
+bash $pathToCode/parseEmail.sh harrison.mcadams@gmail.com
+bash $pathToCode/parseEmail.sh geenaianni@gmail.com
+
+python3 $pathToCode/doMoodProject.py
